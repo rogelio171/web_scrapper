@@ -34,7 +34,7 @@ def _transform():
 
 
 def _load():
-    logger.info('Starging load process')
+    logger.info('Starting load process')
     for news_site_uid in news_sites_uids:
         clean_data_filename = '{}.csv'.format(news_site_uid)
         subprocess.run(['python', 'main.py', clean_data_filename], cwd='./load')
