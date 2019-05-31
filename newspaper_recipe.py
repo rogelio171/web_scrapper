@@ -24,6 +24,9 @@ def main(filename):
     df = _remove_new_lines_from_body(df)
     df = _tokenize_column(df, 'title')
     df = _tokenize_column(df, 'body')
+    df = _remove_duplicate_entries(df, 'title')
+    df = _drop_rows_with_missing_values(df)
+    _save_data(df, filename)
 
     return df
 
@@ -93,6 +96,7 @@ def _remove_new_lines_from_body(df):
     return df
 
 def _tokenize_column(df, column_name):
+    logger.info('Tokenizing the column {}'.format(column_name))
     stop_words = set(stopwords.words('spanish'))
     tokenizer = ( df
                     .dropna()
@@ -105,6 +109,26 @@ def _tokenize_column(df, column_name):
     df['n_tokens_{}'.format(column_name)] = tokenizer
 
     return df
+
+
+def _remove_duplicate_entries(df, column_name):
+    logger.info('Removing duplicates from {}'.format(column_name))
+
+    df.drop_duplicates(subset=column_name, keep='first', inplace=True)
+    return df
+
+
+def _drop_rows_with_missing_values(df):
+    logger.info('Removing rows with no values')
+    
+    return df.dropna()
+
+
+def _save_data(df, filename):
+    clean_filename = 'clean_{}'.format(filename)
+    logger.info('Saving data in the location {}'.format(clean_filename))
+
+    df.to_csv(clean_filename, encoding='utf-8-sig')
 
 
 if __name__ == "__main__":
