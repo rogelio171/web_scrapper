@@ -58,3 +58,6 @@ target/
 
 # CSV files
 *.csv
+
+# Databases
+*.db
